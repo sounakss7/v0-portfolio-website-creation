@@ -1,11 +1,39 @@
 "use client"
 
+import type React from "react"
+
 import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Float, Text3D, Environment, Stars } from "@react-three/drei"
 import { Button } from "@/components/ui/button"
 import { ArrowDown } from "lucide-react"
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, useEffect, useState } from "react"
 import type * as THREE from "three"
+
+function Canvas3DErrorBoundary({ children }: { children: React.ReactNode }) {
+  const [hasError, setHasError] = useState(false)
+
+  useEffect(() => {
+    const handleError = (error: ErrorEvent) => {
+      console.error("[v0] Canvas error caught:", error)
+      setHasError(true)
+    }
+
+    window.addEventListener("error", handleError)
+    return () => window.removeEventListener("error", handleError)
+  }, [])
+
+  if (hasError) {
+    return (
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 flex items-center justify-center">
+        <div className="text-white text-center">
+          <p>3D visualization temporarily unavailable</p>
+        </div>
+      </div>
+    )
+  }
+
+  return <>{children}</>
+}
 
 function AnimatedParticles() {
   const points = useRef<THREE.Points>(null!)
@@ -156,8 +184,19 @@ function Scene3D() {
 }
 
 export function HeroSection() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   const scrollToPortfolio = () => {
-    document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })
+    if (typeof window !== "undefined" && document) {
+      const portfolioElement = document.getElementById("portfolio")
+      if (portfolioElement) {
+        portfolioElement.scrollIntoView({ behavior: "smooth" })
+      }
+    }
   }
 
   return (
@@ -165,11 +204,15 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900"></div>
 
       {/* 3D Canvas Background */}
-      <div className="absolute inset-0">
-        <Canvas camera={{ position: [0, 0, 8], fov: 60 }}>
-          <Scene3D />
-        </Canvas>
-      </div>
+      {isMounted && (
+        <Canvas3DErrorBoundary>
+          <div className="absolute inset-0">
+            <Canvas camera={{ position: [0, 0, 8], fov: 60 }}>
+              <Scene3D />
+            </Canvas>
+          </div>
+        </Canvas3DErrorBoundary>
+      )}
 
       {/* Content Overlay */}
       <div className="relative z-10 flex h-full items-center justify-center">
@@ -182,7 +225,7 @@ export function HeroSection() {
             B.Tech CSE(AI-ML) Student | Passionate about Machine Learning, Data Analysis & Python Development
           </p>
           <p className="text-lg text-gray-300 drop-shadow-md">
-            📍 Kolkata | 🎯 Currently working on Python libraries, ML & Cloud Computing
+            📍 Kolkata | 🎯 Currently learning deep learning and gen AI
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
             <Button
