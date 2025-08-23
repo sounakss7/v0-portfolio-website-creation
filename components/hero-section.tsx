@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Float, Text3D, Environment, Stars } from "@react-three/drei"
+import { OrbitControls, Float, Environment, Stars } from "@react-three/drei"
 import { Button } from "@/components/ui/button"
 import { ArrowDown } from "lucide-react"
 import { useRef, useMemo, useEffect, useState } from "react"
@@ -35,9 +35,19 @@ function Canvas3DErrorBoundary({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+function hasWebGLSupport(): boolean {
+  try {
+    const canvas = document.createElement("canvas")
+    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
+    return !!gl
+  } catch (e) {
+    return false
+  }
+}
+
 function AnimatedParticles() {
   const points = useRef<THREE.Points>(null!)
-  const particleCount = 1000
+  const particleCount = 800 // Reduced particle count for better performance
 
   const particlesPosition = useMemo(() => {
     const positions = new Float32Array(particleCount * 3)
@@ -153,22 +163,11 @@ function Scene3D() {
 
       <AnimatedParticles />
 
-      <Stars radius={50} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
+      <Stars radius={50} depth={50} count={1500} factor={4} saturation={0} fade speed={1} />
 
       <FloatingCube />
       <FloatingSphere />
       <FloatingTorus />
-
-      <Text3D font="/fonts/Geist_Bold.json" size={0.4} height={0.15} position={[-1.5, -2.5, 2]} rotation={[0, 0.2, 0]}>
-        AI/ML
-        <meshStandardMaterial
-          color="#8b5cf6"
-          metalness={0.5}
-          roughness={0.2}
-          emissive="#4c1d95"
-          emissiveIntensity={0.2}
-        />
-      </Text3D>
 
       <Environment preset="night" background={false} />
       <OrbitControls
@@ -185,9 +184,11 @@ function Scene3D() {
 
 export function HeroSection() {
   const [isMounted, setIsMounted] = useState(false)
+  const [hasWebGL, setHasWebGL] = useState(true) // Added WebGL support state
 
   useEffect(() => {
     setIsMounted(true)
+    setHasWebGL(hasWebGLSupport())
   }, [])
 
   const scrollToPortfolio = () => {
@@ -204,7 +205,7 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900"></div>
 
       {/* 3D Canvas Background */}
-      {isMounted && (
+      {isMounted && hasWebGL ? (
         <Canvas3DErrorBoundary>
           <div className="absolute inset-0">
             <Canvas camera={{ position: [0, 0, 8], fov: 60 }}>
@@ -212,6 +213,10 @@ export function HeroSection() {
             </Canvas>
           </div>
         </Canvas3DErrorBoundary>
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/40 to-slate-900">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/20 via-slate-900/50 to-slate-900"></div>
+        </div>
       )}
 
       {/* Content Overlay */}
