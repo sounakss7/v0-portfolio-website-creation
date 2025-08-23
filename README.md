@@ -16,6 +16,12 @@ Your project is live at:
 
 **[https://vercel.com/sounakss7s-projects/v0-portfolio-website-creation](https://vercel.com/sounakss7s-projects/v0-portfolio-website-creation)**
 
+# v0-portfolio-website-creation
+
+[![Vercel Deployment](https://vercel.com/button)](https://v0-portfolio-website-creation.vercel.app/)
+
+![Website Thumbnail](https://v0-portfolio-website-creation.vercel.app/api/og) 
+
 ## Build your app
 
 Continue building your app on:
