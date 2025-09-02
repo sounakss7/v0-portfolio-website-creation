@@ -5,6 +5,7 @@ import { OrbitControls, Float, Sphere, Box } from "@react-three/drei"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Award } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 const skills = [
   { category: "Programming", items: ["Python", "C", "Java", "HTML", "CSS"] },
@@ -93,6 +94,27 @@ export function AboutSection() {
                   <br />🔗 <strong>GitHub:</strong> sounakss7
                   <br />📍 <strong>Location:</strong> Kolkata, India
                 </p>
+              </div>
+              {/* Download Resume (PDF) button */}
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <Button asChild size="lg" className="bg-purple-500 hover:bg-purple-400 text-slate-900">
+                  <a
+                    href="/resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open Sounak Sarkar resume PDF"
+                  >
+                    Download Resume (PDF)
+                  </a>
+                </Button>
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-300 hover:text-purple-200 underline text-sm"
+                >
+                  View in browser
+                </a>
               </div>
             </div>
 

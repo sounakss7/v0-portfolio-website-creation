@@ -7,12 +7,12 @@
 
 ## Overview
 
-This repository will stay in sync with my deployed chats on [v0.app](https://v0.app).
-Any changes made by me in  deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
+Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
 
 ## Deployment
 
-My project is live at:
+Your project is live at:
 
 **[https://vercel.com/sounakss7s-projects/v0-portfolio-website-creation](https://vercel.com/sounakss7s-projects/v0-portfolio-website-creation)**
 
