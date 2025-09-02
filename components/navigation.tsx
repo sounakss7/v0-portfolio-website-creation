@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -14,6 +15,7 @@ const navItems = [
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +31,15 @@ export function Navigation() {
       element.scrollIntoView({ behavior: "smooth" })
     }
     setIsMobileMenuOpen(false)
+  }
+
+  const handleNavClick = (href: string) => {
+    if (href.startsWith("#")) {
+      scrollToSection(href)
+    } else {
+      router.push(href)
+      setIsMobileMenuOpen(false)
+    }
   }
 
   return (
@@ -47,7 +58,7 @@ export function Navigation() {
             {navItems.map((item) => (
               <button
                 key={item.name}
-                onClick={() => scrollToSection(item.href)}
+                onClick={() => handleNavClick(item.href)}
                 className="text-foreground hover:text-accent transition-colors duration-200 font-medium"
               >
                 {item.name}
@@ -73,7 +84,7 @@ export function Navigation() {
               {navItems.map((item) => (
                 <button
                   key={item.name}
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={() => handleNavClick(item.href)}
                   className="text-left text-foreground hover:text-accent transition-colors duration-200 font-medium"
                 >
                   {item.name}

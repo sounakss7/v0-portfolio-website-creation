@@ -16,7 +16,6 @@ Your project is live at:
 
 **[https://vercel.com/sounakss7s-projects/v0-portfolio-website-creation](https://vercel.com/sounakss7s-projects/v0-portfolio-website-creation)**
 
-
 ## Build your app
 
 Continue building your app on:
@@ -29,9 +28,3 @@ Continue building your app on:
 2. Deploy your chats from the v0 interface
 3. Changes are automatically pushed to this repository
 4. Vercel deploys the latest version from this repository
-
-## License Notice
-This project is copyrighted © 2025 Sounak Sarkar.  
-All rights reserved.  
-Unauthorized copying, modification, or distribution of this repository, in whole or in part, is strictly prohibited.  
-Only the author is permitted to make changes.

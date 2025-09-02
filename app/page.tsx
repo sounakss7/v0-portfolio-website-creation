@@ -8,6 +8,7 @@ import { Navigation } from "@/components/navigation"
 import { Canvas } from "@react-three/fiber"
 import { OrbitControls, Stars } from "@react-three/drei"
 import { useRef } from "react"
+import LeetCodeSection from "@/components/leetcode-section"
 
 function ParticleField() {
   const particlesRef = useRef()
@@ -70,6 +71,7 @@ export default function Home() {
         </div>
         <PortfolioSection />
         <AboutSection />
+        <LeetCodeSection />
         <ContactSection />
       </div>
     </main>
