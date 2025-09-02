@@ -20,7 +20,13 @@ export function ContactSection() {
     e.preventDefault()
     const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`)
     const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)
-    window.open(`mailto:hrick3130@gmail.com?subject=${subject}&body=${body}`, "_blank")
+    const mailto = `mailto:hrick3130@gmail.com?subject=${subject}&body=${body}`
+    try {
+      window.location.href = mailto
+    } catch (_err) {
+      // Fallback for very old environments
+      window.open(mailto, "_self")
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

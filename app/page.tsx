@@ -7,7 +7,7 @@ import { ContactSection } from "@/components/contact-section"
 import { Navigation } from "@/components/navigation"
 import { Canvas } from "@react-three/fiber"
 import { OrbitControls, Stars } from "@react-three/drei"
-import { useRef } from "react"
+import { useRef, useEffect, useState } from "react"
 import LeetCodeSection from "@/components/leetcode-section"
 
 function ParticleField() {
@@ -47,19 +47,41 @@ function FloatingShapes() {
   )
 }
 
+function hasWebGLSupport(): boolean {
+  try {
+    const canvas = document.createElement("canvas")
+    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
+    return !!gl
+  } catch {
+    return false
+  }
+}
+
 export default function Home() {
+  const [mounted, setMounted] = useState(false)
+  const [hasWebGL, setHasWebGL] = useState(true)
+
+  useEffect(() => {
+    setMounted(true)
+    setHasWebGL(hasWebGLSupport())
+  }, [])
+
   return (
     <main className="min-h-screen relative">
       <div className="fixed inset-0 z-0">
-        <Canvas camera={{ position: [0, 0, 30], fov: 75 }}>
-          <ambientLight intensity={0.3} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <directionalLight position={[-10, -10, -5]} intensity={0.5} />
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-          <ParticleField />
-          <FloatingShapes />
-          <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
-        </Canvas>
+        {mounted && hasWebGL ? (
+          <Canvas camera={{ position: [0, 0, 30], fov: 75 }}>
+            <ambientLight intensity={0.3} />
+            <pointLight position={[10, 10, 10]} intensity={1} />
+            <directionalLight position={[-10, -10, -5]} intensity={0.5} />
+            <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+            <ParticleField />
+            <FloatingShapes />
+            <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
+          </Canvas>
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900" />
+        )}
       </div>
 
       <div className="fixed inset-0 z-10 bg-gradient-to-br from-slate-900/80 via-purple-900/20 to-slate-900/80 backdrop-blur-[1px]" />
