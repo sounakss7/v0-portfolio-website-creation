@@ -4,10 +4,24 @@ import { useEffect, useRef } from "react"
 import useSWR from "swr"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-const fetcher = (url: string) => fetch(url, { cache: "no-store" }).then((r) => r.json())
+const fetcher = async (url: string) => {
+  const r = await fetch(url, { cache: "no-store" })
+  if (!r.ok) {
+    const text = await r.text()
+    throw new Error(text || `Request failed: ${r.status}`)
+  }
+  return r.json()
+}
 
 export default function ViewCounterSection() {
   const hasCountedRef = useRef(false)
+
+  // live updates (near real-time) using polling
+  const { data, error, isLoading, mutate } = useSWR<{ value: number }>("/api/metrics/view", fetcher, {
+    refreshInterval: 3000, // 3s polling for near real-time
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+  })
 
   // one-time increment per browser (simple dedupe using localStorage)
   useEffect(() => {
@@ -17,9 +31,12 @@ export default function ViewCounterSection() {
       const already = localStorage.getItem(key)
       if (!already && !hasCountedRef.current) {
         hasCountedRef.current = true
-        fetch("/api/metrics/view", { method: "POST" })
-          .then(() => {
+        fetch("/api/metrics/view", { method: "POST", cache: "no-store" })
+          .then(async (res) => {
+            if (!res.ok) throw new Error(await res.text())
             localStorage.setItem(key, String(Date.now()))
+            // force refresh immediately so UI updates without waiting 3s
+            mutate()
           })
           .catch(() => {
             // ignore network errors
@@ -28,13 +45,7 @@ export default function ViewCounterSection() {
     } catch {
       // ignore storage errors
     }
-  }, [])
-
-  // live updates (near real-time) using polling
-  const { data, error, isLoading } = useSWR<{ value: number }>("/api/metrics/view", fetcher, {
-    refreshInterval: 3000, // 3s polling for near real-time
-    revalidateOnFocus: true,
-  })
+  }, [mutate])
 
   const value = data?.value ?? 0
 
