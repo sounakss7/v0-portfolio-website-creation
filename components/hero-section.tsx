@@ -182,7 +182,7 @@ function Scene3D() {
   )
 }
 
-export function HeroSection() {
+export function HeroSection({ disable3D = false }: { disable3D?: boolean }) {
   const [isMounted, setIsMounted] = useState(false)
   const [hasWebGL, setHasWebGL] = useState(true) // Added WebGL support state
 
@@ -205,7 +205,7 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900"></div>
 
       {/* 3D Canvas Background */}
-      {isMounted && hasWebGL ? (
+      {!disable3D && isMounted && hasWebGL ? (
         <Canvas3DErrorBoundary>
           <div className="absolute inset-0">
             <Canvas camera={{ position: [0, 0, 8], fov: 60 }}>

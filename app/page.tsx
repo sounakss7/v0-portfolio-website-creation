@@ -89,7 +89,7 @@ export default function Home() {
       <div className="relative z-20">
         <Navigation />
         <div id="home">
-          <HeroSection />
+          <HeroSection disable3D />
         </div>
         <PortfolioSection />
         <AboutSection />
