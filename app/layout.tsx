@@ -5,7 +5,6 @@ import { GeistMono } from "geist/font/mono"
 import { Playfair_Display } from "next/font/google"
 import "./globals.css"
 import { Suspense } from "react"
-import ViewCounterSection from "@/components/view-counter-section"
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -40,7 +39,7 @@ html {
         <Suspense fallback={<div>Loading...</div>}>
           {children}
           {/* Removed <Analytics /> and <SpeedInsights /> to disable tracking */}
-          <ViewCounterSection />
+          {/* Removed ViewCounterSection to fully disable views footer */}
         </Suspense>
       </body>
     </html>
