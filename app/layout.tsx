@@ -4,9 +4,8 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Playfair_Display } from "next/font/google"
 import "./globals.css"
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Suspense } from "react"
+import ViewCounterSection from "@/components/view-counter-section"
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -40,8 +39,8 @@ html {
       <body className={`${GeistSans.variable} ${GeistMono.variable} ${playfair.variable}`}>
         <Suspense fallback={<div>Loading...</div>}>
           {children}
-          <Analytics />
-          <SpeedInsights />
+          {/* Removed <Analytics /> and <SpeedInsights /> to disable tracking */}
+          <ViewCounterSection />
         </Suspense>
       </body>
     </html>
